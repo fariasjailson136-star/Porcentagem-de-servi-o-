@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Comissão Profissional - Sistema de Registro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0f2e2a 0%, #0a1f1c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        /* Card principal */
+        .card {
+            background: #fef9ef;
+            background: linear-gradient(135deg, #fffaf3 0%, #fff4e8 100%);
+            border-radius: 40px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        /* Cabeçalho */
+        .header {
+            background: linear-gradient(115deg, #1f3a35 0%, #142824 100%);
+            padding: 24px 28px;
+            text-align: center;
+            border-bottom: 3px solid #e6b17e;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #FFE6C7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .header p {
+            color: #cbae86;
+            margin-top: 8px;
+            font-size: 0.85rem;
+        }
+
+        /* Conteúdo */
+        .content {
+            padding: 24px;
+        }
+
+        /* Grupos de formulário */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 160px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2c423f;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            border-radius: 28px;
+            border: 1.5px solid #e2cfb5;
+            background: white;
+            outline: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        select:focus, input:focus {
+            border-color: #c28a56;
+            box-shadow: 0 0 0 3px rgba(194, 138, 86, 0.2);
+        }
+
+        /* Área de comissão */
+        .commission-box {
+            background: #f0e7db;
+            border-radius: 32px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .commission-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            padding: 5px 16px 5px 20px;
+            border-radius: 40px;
+        }
+
+        .commission-control input {
+            width: 80px;
+            padding: 8px;
+            text-align: center;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+        }
+
+        .commission-control span {
+            font-weight: 600;
+            color: #7b623c;
+        }
+
+        /* Botões principais */
+        .btn-save {
+            background: #1f3a35;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            margin-bottom: 24px;
+            transition: 0.2s;
+            box-shadow: 0 4px 0 #0e211e;
+        }
+
+        .btn-save:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #0e211e;
+        }
+
+        /* Resumo do dia */
+        .daily-summary {
+            background: linear-gradient(115deg, #2c5a52 0%, #1e423b 100%);
+            border-radius: 28px;
+            padding: 18px 22px;
+            margin-bottom: 24px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .summary-text h3 {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .summary-text .total-value {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .btn-clear-day {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-clear-day:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Lista de serviços */
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .list-header h3 {
+            color: #2c423f;
+            font-size: 1.2rem;
+        }
+
+        .service-list {
+            max-height: 350px;
+            overflow-y: auto;
+            border-radius: 24px;
+            background: #fef7ef;
+        }
+
+        .list-item {
+            background: white;
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #f0e2d2;
+            transition: 0.2s;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-profession {
+            font-weight: 700;
+            color: #1f3a35;
+            font-size: 1rem;
+        }
+
+        .item-details {
+            font-size: 0.8rem;
+            color: #8b7358;
+            margin-top: 4px;
+        }
+
+        .item-commission {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #c17b3c;
+            margin-right: 15px;
+        }
+
+        .btn-delete {
+            background: #f5e6da;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 30px;
+            color: #b1624b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.8rem;
+        }
+
+        .btn-delete:hover {
+            background: #f0d5c0;
+        }
+
+        .empty-list {
+            text-align: center;
+            padding: 40px;
+            color: #b89a7a;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            font-size: 0.7rem;
+            color: #a68b6e;
+        }
+
+        @media (max-width: 550px) {
+            .content {
+                padding: 18px;
+            }
+            .item-commission {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h1>💼 Comissão Profissional <span>📋</span></h1>
+            <p>Registre serviços de qualquer profissão • Gerencie seus ganhos do dia</p>
+        </div>
+
+        <div class="content">
+            <!-- Campo de profissão: TODAS AS PROFISSÕES -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>👔 Profissão / Trabalho</label>
+                    <select id="profissaoSelect">
+                        <option value="Cabeleireiro(a)">✂️ Cabeleireiro(a) - Corte</option>
+                        <option value="Barbeiro">💈 Barbeiro Especialista</option>
+                        <option value="Manicure">💅 Manicure / Pedicure</option>
+                        <option value="Maquiador(a)">💄 Maquiador(a) Profissional</option>
+                        <option value="Esteticista">✨ Esteticista Corporal</option>
+                        <option value="Designer de Sobrancelhas">👁️ Designer de Sobrancelhas</option>
+                        <option value="Massoterapeuta">💆 Massoterapeuta</option>
+                        <option value="Personal Trainer">🏋️ Personal Trainer</option>
+                        <option value="Fotógrafo">📸 Fotógrafo(a)</option>
+                        <option value="Designer Gráfico">🎨 Designer Gráfico</option>
+                        <option value="Desenvolvedor">💻 Desenvolvedor(a) Freelancer</option>
+                        <option value="Professor Particular">📚 Professor(a) Particular</option>
+                        <option value="Consultor(a)">📊 Consultor(a) de Vendas</option>
+                        <option value="Entregador">🛵 Entregador / Parceiro</option>
+                        <option value="Diarista">🧹 Diarista / Faxina</option>
+                        <option value="Eletricista">⚡ Eletricista</option>
+                        <option value="Encanador">🔧 Encanador</option>
+                        <option value="Pintor">🎨 Pintor</option>
+                        <option value="Jardineiro">🌿 Jardineiro</option>
+                        <option value="Veterinário">🐾 Veterinário(a)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>💰 Valor do Serviço (R$)</label>
+                    <input type="number" id="valorServico" step="0.01" value="50.00" placeholder="Ex: 80.00">
+                </div>
+            </div>
+
+            <!-- Comissão percentual -->
+            <div class="commission-box">
+                <span style="font-weight: 600;">📈 Percentual de Comissão</span>
+                <div class="commission-control">
+                    <input type="number" id="comissaoPercent" step="1" min="0" max="100" value="40">
+                    <span>%</span>
+                </div>
+            </div>
+
+            <!-- Botão Salvar serviço -->
+            <button class="btn-save" id="btnSalvarServico">
+                💾 SALVAR SERVIÇO + COMISSÃO
+            </button>
+
+            <!-- Resumo do dia (total ganho) -->
+            <div class="daily-summary">
+                <div class="summary-text">
+                    <h3>💰 Total de comissão HOJE</h3>
+                    <div class="total-value" id="totalComissaoDia">R$ 0,00</div>
+                </div>
+                <button class="btn-clear-day" id="btnLimparDia">🗑️ Limpar histórico</button>
+            </div>
+
+            <!-- Lista de serviços registrados -->
+            <div class="list-header">
+                <h3>📋 Serviços realizados (hoje)</h3>
+                <span style="font-size: 12px; color:#8b7358;" id="quantidadeRegistros">0 registros</span>
+            </div>
+            <div class="service-list" id="serviceListContainer">
+                <div class="empty-list">Nenhum serviço registrado ainda.<br>Adicione seu primeiro trabalho!</div>
+            </div>
+        </div>
+        <footer>
+            ✅ Cada serviço é salvo com profissão, valor e comissão. Soma automática do dia. Clique em 🗑️ ao lado de cada item para remover.
+        </footer>
+    </div>
+</div>
+
+<script>
+    // ==================== ESTRUTURA DE DADOS ====================
+    // Array para armazenar os serviços do dia
+    let registros = [];
+
+    // Chave do localStorage para persistir os dados
+    const STORAGE_KEY = 'comissao_profissional_registros';
+
+    // Elementos DOM
+    const profissaoSelect = document.getElementById('profissaoSelect');
+    const valorServicoInput = document.getElementById('valorServico');
+    const comissaoPercentInput = document.getElementById('comissaoPercent');
+    const btnSalvar = document.getElementById('btnSalvarServico');
+    const btnLimparDia = document.getElementById('btnLimparDia');
+    const totalComissaoDiaSpan = document.getElementById('totalComissaoDia');
+    const serviceListContainer = document.getElementById('serviceListContainer');
+    const quantidadeRegistrosSpan = document.getElementById('quantidadeRegistros');
+
+    // ==================== FUNÇÕES AUXILIARES ====================
+    // Formatação de moeda BR
+    function formatMoney(value) {
+        return value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // Carregar dados do localStorage
+    function loadFromStorage() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                registros = JSON.parse(stored);
+                // garantir que cada objeto tenha os campos necessários (validade)
+                registros = registros.filter(r => r && typeof r === 'object' && r.profissao && typeof r.valor === 'number' && typeof r.comissao === 'number');
+            } catch(e) {
+                registros = [];
+            }
+        } else {
+            registros = [];
+        }
+        updateUI();
+    }
+
+    // Salvar no localStorage
+    function saveToStorage() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(registros));
+    }
+
+    // Calcular comissão baseado em valor e percentual
+    function calcularComissao(valor, percentual) {
+        return (valor * percentual) / 100;
+    }
+
+    // Adicionar novo serviço à lista
+    function adicionarServico(profissao, valor, percentual) {
+        if (!profissao || valor <= 0) {
+            alert("❌ Preencha um valor de serviço válido (maior que zero)!");
+            return false;
+        }
+        if (percentual < 0 || percentual > 100) {
+            alert("❌ Percentual de comissão deve estar entre 0 e 100%");
+            return false;
+        }
+
+        const comissaoGanha = calcularComissao(valor, percentual);
+        const novoRegistro = {
+            id: Date.now() + Math.random() * 10000, // ID único
+            profissao: profissao,
+            valor: valor,
+            percentual: percentual,
+            comissao: comissaoGanha,
+            dataHora: new Date().toLocaleTimeString('pt-BR')
+        };
+        registros.unshift(novoRegistro); // Adiciona no início (mais recente primeiro)
+        saveToStorage();
+        updateUI();
+        return true;
+    }
+
+    // Remover serviço por ID
+    function removerServico(id) {
+        registros = registros.filter(reg => reg.id !== id);
+        saveToStorage();
+        updateUI();
+    }
+
+    // Limpar todos os registros do dia
+    function limparTodosRegistros() {
+        if (registros.length === 0) return;
+        if (confirm("⚠️ Tem certeza que deseja LIMPAR TODOS os serviços registrados hoje? Essa ação é irreversível.")) {
+            registros = [];
+            saveToStorage();
+            updateUI();
+        }
+    }
+
+    // Calcular e retornar soma total das comissões
+    function calcularTotalComissao() {
+        let total = 0;
+        for (let reg of registros) {
+            total += reg.comissao;
+        }
+        return total;
+    }
+
+    // Atualizar interface: total do dia + lista de serviços
+    function updateUI() {
+        // Atualizar total de comissão
+        const total = calcularTotalComissao();
+        totalComissaoDiaSpan.innerText = `R$ ${formatMoney(total)}`;
+
+        // Atualizar contador de registros
+        const qtd = registros.length;
+        quantidadeRegistrosSpan.innerText = `${qtd} ${qtd === 1 ? 'registro' : 'registros'}`;
+
+        // Renderizar lista de serviços
+        if (registros.length === 0) {
+            serviceListContainer.innerHTML = `<div class="empty-list">✨ Nenhum serviço registrado ainda.<br>Selecione a profissão e salve seu primeiro trabalho!</div>`;
+            return;
+        }
+
+        let html = '';
+        for (let reg of registros) {
+            // Nome bonito da profissão (vem do select, já está com emoji e nome)
+            let profissaoDisplay = reg.profissao;
+            // Valor do serviço formatado
+            const valorFormatado = formatMoney(reg.valor);
+            const comissaoFormatada = formatMoney(reg.comissao);
+            const percentualExibido = reg.percentual;
+            
+            html += `
+                <div class="list-item" data-id="${reg.id}">
+                    <div class="item-info">
+                        <div class="item-profession">${escapeHtml(profissaoDisplay)}</div>
+                        <div class="item-details">
+                            💵 Serviço: R$ ${valorFormatado}  •  📊 Comissão: ${percentualExibido}%
+                            <span style="font-size:0.7rem; margin-left: 8px;">🕒 ${reg.dataHora || ''}</span>
+                        </div>
+                    </div>
+                    <div class="item-commission">+ R$ ${comissaoFormatada}</div>
+                    <button class="btn-delete" onclick="removerServicoPorId(${reg.id})">🗑️ Remover</button>
+                </div>
+            `;
+        }
+        serviceListContainer.innerHTML = html;
+    }
+
+    // Função global para remover (usada no onclick)
+    window.removerServicoPorId = function(id) {
+        removerServico(id);
+    };
+
+    // Pequena função para evitar XSS
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // ==================== EVENTOS E VALIDAÇÃO ====================
+    // Salvar novo serviço com base nos campos atuais
+    function salvarServicoAtual() {
+        let profissao = profissaoSelect.value;
+        // Capturar texto amigável (já vem com emoji e nome completo)
+        const selectedOption = profissaoSelect.options[profissaoSelect.selectedIndex];
+        if (selectedOption) {
+            profissao = selectedOption.text; // Ex: "✂️ Cabeleireiro(a) - Corte"
+        } else {
+            profissao = profissaoSelect.value;
+        }
+        
+        let valor = parseFloat(valorServicoInput.value);
+        if (isNaN(valor)) valor = 0;
+        if (valor <= 0) {
+            alert("⚠️ Por favor, informe um valor de serviço maior que zero.");
+            return;
+        }
+        
+        let percentual = parseFloat(comissaoPercentInput.value);
+        if (isNaN(percentual)) percentual = 40;
+        percentual = Math.min(100, Math.max(0, percentual));
+        comissaoPercentInput.value = percentual;
+        
+        const sucesso = adicionarServico(profissao, valor, percentual);
+        if (sucesso) {
+            // Opcional: não limpar os campos para facilitar adição rápida, mas podemos resetar o valor? deixamos o valor como está para novo serviço similar.
+            // Apenas foco no select (boa prática)
+            profissaoSelect.focus();
+            // Feedback visual rápido
+            btnSalvar.style.transform = "scale(0.97)";
+            setTimeout(() => { btnSalvar.style.transform = ""; }, 120);
+        }
+    }
+
+    // Sincronizar percentual com limites
+    function validarPercentual() {
+        let p = parseFloat(comissaoPercentInput.value);
+        if (isNaN(p)) p = 40;
+        p = Math.min(100, Math.max(0, p));
+        comissaoPercentInput.value = p;
+    }
+
+    // Carregar dados iniciais e configurar eventos
+    function init() {
+        loadFromStorage();
+        
+        // Eventos dos botões
+        btnSalvar.addEventListener('click', salvarServicoAtual);
+        btnLimparDia.addEventListener('click', limparTodosRegistros);
+        
+        // Validação do percentual ao perder foco
+        comissaoPercentInput.addEventListener('blur', validarPercentual);
+        comissaoPercentInput.addEventListener('input', function() {
+            let val = parseFloat(this.value);
+            if (!isNaN(val) && val > 100) this.value = 100;
+            if (!isNaN(val) && val < 0) this.value = 0;
+        });
+        
+        // Exemplo: Ao pressionar Enter no campo valor, salvar (opcional)
+        valorServicoInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') salvarServicoAtual();
+        });
+        
+        // Atualizar valor mostrando exemplo interativo caso queira: sem necessidade extra
+    }
+    
+    // Inicializar
+    init();
+</script>
+</body>
+</html>
